@@ -1,22 +1,60 @@
 <?php
-$input = 60;
-$fizzer = array( 3 => "fizz", 5 => "buzz", 4 => "zip" );
-
-function fizzy($input, $fizzer)
+class FizzBot
 {
-  for ( $i = 1; $i <= $input; $i++ ) {
-    $num = array_filter($fizzer, function($v, $k) use($i){
-      if ($i % $k == 0) {
-        return $v;
-      };
-    }, ARRAY_FILTER_USE_BOTH);
+  private $input;
+  private $fizzer;
 
-    if ($num) {
-      echo implode(" ",$num);
-    } else {
-      echo "<b>". $i . "</b>";
+  function __construct($input, $fizzer = array(3 => "fizz", 5 => "buzz"))
+  {
+    $this->input = $input;
+    $this->fizzer = $fizzer;
+  }
+
+  function getInput()
+  {
+    return $this->input;
+  }
+  function setInput($input)
+  {
+    $user_input = (integer) $input;
+    if ($user_input != 0) {
+      $this->input = $user_input;
     }
-    echo "<br>";
+  }
+
+
+  function getFizzer()
+  {
+    foreach ($this->fizzer as $key => $value) {
+      echo $value . " : ";
+      echo $key;
+      echo "<br>";
+    }
+  }
+  function setFizzer($array)
+  {
+    $user_array = (array) $array;
+    if (sizeof($user_array) != 0) {
+      $this->fizzer = $user_array;
+    }
+  }
+
+  function fizzy()
+  {
+    for ( $i = 1; $i <= $this->input; $i++ ) {
+      $num = array_filter($this->fizzer, function($v, $k) use($i){
+        if ($i % $k == 0) {
+          return $v;
+        };
+      }, ARRAY_FILTER_USE_BOTH);
+
+      if ($num) {
+        echo implode(" ",$num);
+      } else {
+        echo "<b>". $i . "</b>";
+      }
+      echo "<br>";
+    }
   }
 }
  ?>
@@ -30,10 +68,61 @@ function fizzy($input, $fizzer)
   </head>
   <body>
     <div class="container">
-      <h1>
-        <?php fizzy($input, $fizzer) ?>
-      </h1>
+      <div class="col-md-6">
+        <?php
+        $thing = new FizzBot(50);
+        ?>
+        <div class="col-md-6">
+          <h1>
+            Input:
+            <?php
+              echo $thing->getInput();
+            ?>
+          </h1>
+        </div>
+        <div class="col-md-6">
+          <h2>
+            Fizzer:
+            <br>
+            <?php
+              $thing->getFizzer();
+             ?>
+          </h2>
+        </div>
+        <span>
+          <?php
+          $thing->fizzy();
+          ?>
+        </span>
+      </div>
+      <div class="col-md-6">
+        <?php
+        $other_thing = array(3 => "boom", 5 => "bap");
+        $thing->setFizzer($other_thing);
+        ?>
+        <div class="col-md-6">
+          <h1>
+            Input:
+            <?php
+              echo $thing->getInput();
+            ?>
+          </h1>
+        </div>
+        <div class="col-md-6">
+          <h2>
+            Fizzer:
+            <br>
+            <?php
+              $thing->getFizzer();
+             ?>
+          </h2>
+        </div>
+        <span>
+          <?php
+            $thing->fizzy();
+          ?>
+        </span>
+      </div>
     </div>
-
   </body>
 </html>
